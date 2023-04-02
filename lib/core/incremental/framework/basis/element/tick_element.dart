@@ -1,10 +1,19 @@
-/// 定义Tick元素节点
+/// 定义Tick元素节点，基础时间元素
 typedef TickElement = int Function();
 
-/// 辅助类
-typedef TickerElement = TickElement Function(int tick);
+extension TickElementOperate on TickElement {
+  TickElement plus(TickElement tick) {
+    int ret = this.call() + tick.call();
+    return () => ret;
+  }
 
-TickerElement tickerElement = (int tick) {
-  assert(tick > 1);
-  return () => tick;
-};
+  TickElement subtract(TickElement tick) {
+    int ret = this.call() - tick.call();
+    return () => ret;
+  }
+
+  TickElement multiply(int multiple) {
+    int ret = this.call() * multiple;
+    return () => ret;
+  }
+}

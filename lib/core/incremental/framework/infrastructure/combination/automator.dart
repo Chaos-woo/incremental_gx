@@ -6,7 +6,7 @@ import 'package:incremental_gx/core/incremental/framework/infrastructure/generat
 
 /// 定义生成器自动化
 abstract class Automator {
-  final Generator generator;
+  final Generator _generator;
 
   /// 运行开关状态
   bool switcher = false;
@@ -30,19 +30,19 @@ abstract class Automator {
   String displaySuffix = '';
 
   Automator({
-    required this.generator,
+    required Generator generator,
     this.turnOnCallback,
     this.turnOffCallback,
     this.preGenerateCallback,
     this.postGenerateCallback,
     String? displayPrefix,
     String? displaySuffix,
-  }) {
+  }) : _generator = generator {
     this.displayPrefix = displayPrefix ?? '';
     this.displaySuffix = displaySuffix ?? '';
   }
 
-  String name() => displayPrefix + generator.name().call() + displaySuffix;
+  String name() => displayPrefix + _generator.name().call() + displaySuffix;
 
   void turnOn() {
     switcher = true;
@@ -56,7 +56,7 @@ abstract class Automator {
 
   List<Currency> processing(double delta) {
     preGenerateCallback?.call();
-    List<Currency> currencies = generator.generate(delta);
+    List<Currency> currencies = _generator.generate(delta);
     postGenerateCallback?.call();
     return currencies;
   }
@@ -83,8 +83,8 @@ class IntermittentAutomator extends Automator {
   SwitchCallbackElement? idleCallback;
 
   /// 工作状态转换
-  bool _firstlySwitchIntoIdle = true;
-  bool _firstlySwitchIntoWorking = true;
+  bool _workStatusSwitchIntoIdle = true;
+  bool _workStatusSwitchIntoWorking = true;
 
   IntermittentAutomator({
     required Generator generator,
@@ -115,19 +115,19 @@ class IntermittentAutomator extends Automator {
   List<Currency> processing(double delta) {
     if (_workingTick > workingTick.call() && _remainingIdleTick > 0) {
       /// 达到最大运行时间，进入机器闲置冷却时间
-      _remainingIdleTick--;
+      _remainingIdleTick -= delta as int;
 
-      if (_firstlySwitchIntoIdle) {
+      if (_workStatusSwitchIntoIdle) {
         idleCallback?.call();
-        _firstlySwitchIntoWorking = true;
-        _firstlySwitchIntoIdle = false;
+        _workStatusSwitchIntoWorking = true;
+        _workStatusSwitchIntoIdle = false;
       }
 
       return [];
     }
 
     /// 工作时间增加
-    _workingTick++;
+    _workingTick += delta as int;
 
     if (_remainingIdleTick <= 0) {
       /// 机器闲置冷却完成，进入工作状态
@@ -135,10 +135,10 @@ class IntermittentAutomator extends Automator {
       _workingTick = 0;
       _remainingIdleTick = idleTick.call();
 
-      if (_firstlySwitchIntoWorking) {
+      if (_workStatusSwitchIntoWorking) {
         workingCallback?.call();
-        _firstlySwitchIntoIdle = true;
-        _firstlySwitchIntoWorking = false;
+        _workStatusSwitchIntoIdle = true;
+        _workStatusSwitchIntoWorking = false;
       }
     }
 

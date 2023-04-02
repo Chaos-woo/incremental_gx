@@ -10,7 +10,7 @@ abstract class Effect {
   late int remainingDuration;
 
   /// 当前已叠加效果次数
-  int _stackCnt = 1;
+  int _stackCount = 1;
 
   /// 效果时限类型
   final EffectTimingType timingType;
@@ -41,13 +41,13 @@ abstract class Effect {
   MaxStackableTimesElement maxStackableTimes() => () => 1;
 
   /// 减少剩余持续时间
-  void reduceRemainingDuration() {
-    remainingDuration--;
+  void reduceRemainingDuration(TickElement tick) {
+    remainingDuration -= tick.call();
   }
 
   /// 效果是否结束
   bool finished() {
-    return remainingDuration > 0;
+    return remainingDuration <= 0;
   }
 
   /// 终止效果
@@ -61,11 +61,11 @@ abstract class Effect {
       return;
     }
 
-    if (_stackCnt + 1 > maxStackableTimes().call()) {
+    if (_stackCount + 1 > maxStackableTimes().call()) {
       return;
     }
 
-    _stackCnt++;
+    _stackCount++;
     if (tick != null) {
       remainingDuration += tick.call();
     } else {

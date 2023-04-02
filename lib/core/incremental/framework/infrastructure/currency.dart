@@ -13,11 +13,11 @@ abstract class Currency extends Resource {
     this.amount = amount ?? 0.0;
   }
 
-  operator +(Currency addend) {
-    amount += addend.amount;
+  void plus(Currency currency) {
+    amount += currency.amount;
   }
 
-  operator -(Currency subtrahend) {
-    amount -= subtrahend.amount;
+  void subtract(Currency currency) {
+    amount -= currency.amount;
   }
 }
