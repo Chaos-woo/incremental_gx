@@ -7,3 +7,7 @@ typedef IntRarityElement = RarityElement Function(int rarity);
 IntRarityElement intRarityElement = (int rarity) {
   return () => rarity;
 };
+
+// extension IntRarityElementExtension on IntRarityElement {
+//   RarityElement getElement(int rarity) => this.call(rarity);
+// }

@@ -1,4 +1,5 @@
 import 'package:incremental_gx/core/incremental/framework/basis/element/rate_element.dart';
+import 'package:incremental_gx/core/incremental/framework/basis/feature/element_return_value_function_extension.dart';
 import 'package:incremental_gx/core/incremental/framework/infrastructure/currency.dart';
 
 /// 定义货币交换比率
@@ -15,6 +16,6 @@ class ExchangeRate<T1 extends Currency, T2 extends Currency> {
   ExchangeRate(T1 fromCurrency, T2 toCurrency, RateElement rate) {
     t1Type = fromCurrency.runtimeType;
     t2Type = toCurrency.runtimeType;
-    this.rate = rate.call();
+    this.rate = rate.get();
   }
 }

@@ -8,3 +8,7 @@ NormalizedProbabilityElement normalizedProbability = (double probability) {
   assert(probability >= 0.0 && probability <= 1.0);
   return () => probability;
 };
+
+// extension NormalizedProbabilityElementExtension on NormalizedProbabilityElement {
+//   ProbabilityElement getElement(double probability) => this.call(probability);
+// }

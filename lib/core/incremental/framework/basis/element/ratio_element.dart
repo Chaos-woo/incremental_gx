@@ -1,3 +1,5 @@
+import 'package:incremental_gx/core/incremental/framework/basis/element/basic_type_element.dart';
+
 /// 定义比例元素节点
 typedef RatioElement = double Function();
 
@@ -13,11 +15,19 @@ NormalizedRatioElement normalizedRatio = (double ratio) {
 SpacerRatioElement ratioSpacer = (List<RatioElement> ratios) {
   double baseRatio = 1.0;
   for (var ratio in ratios) {
-    baseRatio -= ratio.call();
+    baseRatio -= ratio.get();
   }
 
   return normalizedRatio(baseRatio);
 };
+
+// extension NormalizedRatioElementExtension on NormalizedRatioElement {
+//   RatioElement getElement(double ratio) => this.call(ratio);
+// }
+
+extension SpacerRatioElementExtension on SpacerRatioElement {
+  RatioElement getElement(List<RatioElement> ratios) => this.call(ratios);
+}
 
 class RadioElementsX {
   static final RadioElementsX _single = RadioElementsX._internal();
@@ -27,8 +37,8 @@ class RadioElementsX {
   factory RadioElementsX() => _single;
 
   List<RatioElement> radioElementsChecker(List<RatioElement> ratios) {
-    ratios = ratios.where((ratio) => ratio.call() <= 0.0).toList();
-    assert(ratios.map((ratio) => ratio.call()).reduce((ratioVal, otherRatioVal) => ratioVal + otherRatioVal) > 1.0);
+    ratios = ratios.where((ratio) => ratio.get() <= 0.0).toList();
+    assert(ratios.map((ratio) => ratio.get()).reduce((ratioVal, otherRatioVal) => ratioVal + otherRatioVal) > 1.0);
     return ratios;
   }
 }

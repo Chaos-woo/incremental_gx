@@ -1,3 +1,4 @@
+import 'package:incremental_gx/core/incremental/framework/basis/element/basic_type_element.dart';
 import 'package:incremental_gx/core/incremental/framework/basis/element/description_element.dart';
 import 'package:incremental_gx/core/incremental/framework/basis/element/identifier_element.dart';
 import 'package:incremental_gx/core/incremental/framework/basis/element/name_element.dart';
@@ -15,8 +16,11 @@ abstract class Effect {
   /// 效果时限类型
   final EffectTimingType timingType;
 
-  Effect(this.timingType) {
-    remainingDuration = duration().call();
+  /// 效果类型
+  final EffectType effectType;
+
+  Effect(this.timingType, this.effectType) {
+    remainingDuration = duration().get();
   }
 
   /// 效果标识符
@@ -42,7 +46,7 @@ abstract class Effect {
 
   /// 减少剩余持续时间
   void reduceRemainingDuration(TickElement tick) {
-    remainingDuration -= tick.call();
+    remainingDuration -= tick.get();
   }
 
   /// 效果是否结束
@@ -57,19 +61,19 @@ abstract class Effect {
 
   /// 叠加效果
   void stackEffect({TickElement? tick}) {
-    if (!stackable().call()) {
+    if (!stackable().get()) {
       return;
     }
 
-    if (_stackCount + 1 > maxStackableTimes().call()) {
+    if (_stackCount + 1 > maxStackableTimes().get()) {
       return;
     }
 
     _stackCount++;
     if (tick != null) {
-      remainingDuration += tick.call();
+      remainingDuration += tick.get();
     } else {
-      remainingDuration += duration().call();
+      remainingDuration += duration().get();
     }
   }
 }
@@ -78,4 +82,10 @@ abstract class Effect {
 enum EffectTimingType {
   terminable, // 有期限的
   timeless, // 无期限的
+}
+
+/// 效果类型
+enum EffectType {
+  positive, // 增益效果
+  negative, // 减益效果
 }

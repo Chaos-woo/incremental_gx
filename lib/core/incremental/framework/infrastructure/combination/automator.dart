@@ -1,3 +1,4 @@
+import 'package:incremental_gx/core/incremental/framework/basis/element/basic_type_element.dart';
 import 'package:incremental_gx/core/incremental/framework/basis/element/processing_callback_element.dart';
 import 'package:incremental_gx/core/incremental/framework/basis/element/switch_callback_element.dart';
 import 'package:incremental_gx/core/incremental/framework/basis/element/tick_element.dart';
@@ -42,7 +43,7 @@ abstract class Automator {
     this.displaySuffix = displaySuffix ?? '';
   }
 
-  String name() => displayPrefix + _generator.name().call() + displaySuffix;
+  String name() => displayPrefix + _generator.name().get() + displaySuffix;
 
   void turnOn() {
     switcher = true;
@@ -108,12 +109,12 @@ class IntermittentAutomator extends Automator {
           displaySuffix: displaySuffix,
         ) {
     _workingTick = 0;
-    _remainingIdleTick = idleTick.call();
+    _remainingIdleTick = idleTick.get();
   }
 
   @override
   List<Currency> processing(double delta) {
-    if (_workingTick > workingTick.call() && _remainingIdleTick > 0) {
+    if (_workingTick > workingTick.get() && _remainingIdleTick > 0) {
       /// 达到最大运行时间，进入机器闲置冷却时间
       _remainingIdleTick -= delta as int;
 
@@ -133,7 +134,7 @@ class IntermittentAutomator extends Automator {
       /// 机器闲置冷却完成，进入工作状态
       /// 工作时间重置
       _workingTick = 0;
-      _remainingIdleTick = idleTick.call();
+      _remainingIdleTick = idleTick.get();
 
       if (_workStatusSwitchIntoWorking) {
         workingCallback?.call();

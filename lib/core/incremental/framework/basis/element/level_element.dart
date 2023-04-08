@@ -7,3 +7,7 @@ typedef IntLevelElement = LevelElement Function(int level);
 IntLevelElement intLevelElement = (int level) {
   return () => level;
 };
+
+// extension IntLevelElementExtension on IntLevelElement {
+//   LevelElement getElement(int level) => this.call(level);
+// }

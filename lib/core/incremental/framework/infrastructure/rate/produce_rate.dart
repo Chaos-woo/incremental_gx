@@ -1,9 +1,9 @@
 import 'package:incremental_gx/core/incremental/framework/basis/element/rate_element.dart';
 
-/// double类型消耗速率实现
+/// double类型生产速率实现
 typedef DoubleProduceRate = RateElement Function(double rate);
 
-/// int类型消耗速率实现
+/// int类型生产速率实现
 typedef IntProduceRate = RateElement Function(int rate);
 
 /// 辅助类

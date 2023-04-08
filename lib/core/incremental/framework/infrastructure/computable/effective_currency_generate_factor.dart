@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:incremental_gx/core/incremental/framework/basis/element/basic_type_element.dart';
+import 'package:incremental_gx/core/incremental/framework/basis/feature/element_return_value_function_extension.dart';
 import 'package:incremental_gx/core/incremental/framework/definition/drive/computable/effective_computable.dart';
 import 'package:incremental_gx/core/incremental/framework/infrastructure/computable/generate_base_factor.dart';
 import 'package:incremental_gx/core/incremental/framework/infrastructure/generator.dart';
@@ -25,15 +27,15 @@ class EffectiveCurrencyGenerateComputable {
     required this.effectiveProduceRate,
   });
 
-  /// 计算本次货币生产数量
+  /// 计算单位时间货币生产量
   double compute(double delta) {
     double probability = (effectiveProduceProbability != null)
-        ? effectiveProduceProbability?.call(factor.baseProduceProbability.call()) as double
-        : factor.baseProduceProbability.call();
+        ? effectiveProduceProbability?.getElement(factor.baseProduceProbability.get()).get() as double
+        : factor.baseProduceProbability.get();
 
     double rate = (effectiveProduceRate != null)
-        ? effectiveProduceRate?.call(factor.baseProduceRate.call()) as double
-        : factor.baseProduceRate.call();
+        ? effectiveProduceRate?.call(factor.baseProduceRate.get()).get() as double
+        : factor.baseProduceRate.get();
 
     bool generatable = true;
     if (probability < 1.0) {
