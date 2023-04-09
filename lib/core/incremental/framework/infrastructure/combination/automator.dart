@@ -55,7 +55,7 @@ abstract class Automator {
     turnOffCallback?.call();
   }
 
-  List<Currency> processing(double delta) {
+  List<Currency> processing(int delta) {
     preGenerateCallback?.call();
     List<Currency> currencies = _generator.generate(delta);
     postGenerateCallback?.call();
@@ -113,7 +113,7 @@ class IntermittentAutomator extends Automator {
   }
 
   @override
-  List<Currency> processing(double delta) {
+  List<Currency> processing(int delta) {
     if (_workingTick > workingTick.get() && _remainingIdleTick > 0) {
       /// 达到最大运行时间，进入机器闲置冷却时间
       _remainingIdleTick -= delta as int;

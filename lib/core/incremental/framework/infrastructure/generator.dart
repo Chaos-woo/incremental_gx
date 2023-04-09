@@ -46,7 +46,7 @@ abstract class Generator extends Resource {
   bool canUpdate() => updaters.isNotEmpty;
 
   /// 生成器实际资源生产
-  List<Currency> generate(double delta);
+  List<Currency> generate(int delta);
 
   /// 生成器升级
   bool update(Updater updater) {

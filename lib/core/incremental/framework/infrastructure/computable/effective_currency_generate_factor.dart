@@ -28,7 +28,7 @@ class EffectiveCurrencyGenerateComputable {
   });
 
   /// 计算单位时间货币生产量
-  double compute(double delta) {
+  double compute(int delta) {
     double probability = (effectiveProduceProbability != null)
         ? effectiveProduceProbability?.getElement(factor.baseProduceProbability.get()).get() as double
         : factor.baseProduceProbability.get();
